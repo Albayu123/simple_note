@@ -27,7 +27,11 @@ class DatabaseHelper {
 
   static Future<int> createItem(String title, String? description) async {
     final db = await DatabaseHelper.db();
-    final data = {'title': title, 'description': description};
+    final data = {
+      'title': title,
+      'description': description,
+      'createdAt': DateTime.now().toString(),
+    };
     final id = await db.insert('items', data,
         conflictAlgorithm: sql.ConflictAlgorithm.replace);
     return id;
@@ -35,7 +39,7 @@ class DatabaseHelper {
 
   static Future<List<Map<String, dynamic>>> getItems() async {
     final db = await DatabaseHelper.db();
-    return db.query('items', orderBy: "id");
+    return db.query('items', orderBy: "id DESC");
   }
 
   static Future<int> updateItem(int id, String title, String? description) async {
